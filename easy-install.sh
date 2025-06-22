@@ -54,25 +54,56 @@ echo -e "${YELLOW}📂 Creating directories...${NC}"
 mkdir -p "$BIN_DIR"
 mkdir -p "$EXAMPLES_DIR"
 
-# For testing, use local package
+# Check if we have a local package or need to build from source
 if [ -f "scaffoldlang-v2.0.0-complete.tar.gz" ]; then
     echo -e "${GREEN}📦 Using local package...${NC}"
     TEMP_FILE="/tmp/scaffoldlang.tar.gz"
     cp "scaffoldlang-v2.0.0-complete.tar.gz" "$TEMP_FILE"
+    
+    # Extract package
+    echo -e "${YELLOW}📦 Extracting ScaffoldLang...${NC}"
+    cd "$INSTALL_DIR"
+    tar -xzf "$TEMP_FILE"
+    
+    # Move files to proper locations
+    if [ -f "target/release/scaffoldlang" ]; then
+        mv target/release/scaffoldlang "$BIN_DIR/"
+        chmod +x "$BIN_DIR/scaffoldlang"
+    fi
 else
-    echo -e "${RED}❌ Package not found. Please ensure scaffoldlang-v2.0.0-complete.tar.gz is in the current directory.${NC}"
-    exit 1
-fi
-
-# Extract package
-echo -e "${YELLOW}📦 Extracting ScaffoldLang...${NC}"
-cd "$INSTALL_DIR"
-tar -xzf "$TEMP_FILE"
-
-# Move files to proper locations
-if [ -f "target/release/scaffoldlang" ]; then
-    mv target/release/scaffoldlang "$BIN_DIR/"
-    chmod +x "$BIN_DIR/scaffoldlang"
+    echo -e "${YELLOW}🔧 Building ScaffoldLang from source...${NC}"
+    
+    # Check if Rust is installed
+    if ! command -v cargo &> /dev/null; then
+        echo -e "${RED}❌ Rust/Cargo not found. Installing Rust...${NC}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source ~/.cargo/env
+    fi
+    
+    echo -e "${GREEN}✅ Rust/Cargo found${NC}"
+    
+    # Copy source files to install directory
+    echo -e "${YELLOW}📁 Copying source files...${NC}"
+    cp -r src "$INSTALL_DIR/"
+    cp Cargo.toml "$INSTALL_DIR/"
+    cp -r vscode-extension "$INSTALL_DIR/"
+    cp -r examples "$INSTALL_DIR/"
+    cp *.md "$INSTALL_DIR/" 2>/dev/null || true
+    
+    # Build ScaffoldLang
+    echo -e "${YELLOW}🔨 Building ScaffoldLang (this may take a few minutes)...${NC}"
+    cd "$INSTALL_DIR"
+    cargo build --release
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Build successful!${NC}"
+        # Move binary to bin directory
+        mv target/release/scaffoldlang "$BIN_DIR/"
+        chmod +x "$BIN_DIR/scaffoldlang"
+    else
+        echo -e "${RED}❌ Build failed!${NC}"
+        exit 1
+    fi
 fi
 
 if [ -d "examples" ]; then
@@ -156,7 +187,7 @@ EOF
 chmod +x "$BIN_DIR/scaffold-test"
 
 # Cleanup
-rm -f "$TEMP_FILE"
+rm -f "$TEMP_FILE" 2>/dev/null || true
 
 # Final instructions
 echo ""
