@@ -58,8 +58,8 @@ fn main() {
         }
         "run" => {
             if args.len() < 3 {
-                eprintln("❌ Error: Please specify a file to run");
-                eprintln("Usage: scaffoldlang run <file.sl>");
+                eprintln!("❌ Error: Please specify a file to run");
+                eprintln!("Usage: scaffoldlang run <file.sl>");
                 process::exit(1);
             }
             run_file(&args[2]);
