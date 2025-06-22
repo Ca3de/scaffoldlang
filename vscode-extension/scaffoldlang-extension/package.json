@@ -1,0 +1,171 @@
+{
+  "name": "scaffoldlang",
+  "displayName": "ScaffoldLang Koenigsegg Edition",
+  "description": "🏎️ The hypercar of programming languages - syntax highlighting, running, and debugging for ScaffoldLang",
+  "version": "2.0.0",
+  "publisher": "scaffoldlang",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "scaffoldlang",
+    "hypercar",
+    "koenigsegg",
+    "programming",
+    "fast",
+    "performance"
+  ],
+  "activationEvents": [
+    "onLanguage:scaffoldlang"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "scaffoldlang",
+        "aliases": [
+          "ScaffoldLang",
+          "scaffoldlang",
+          "sl"
+        ],
+        "extensions": [
+          ".sl"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/scaffoldlang-light.svg",
+          "dark": "./icons/scaffoldlang-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "scaffoldlang",
+        "scopeName": "source.scaffoldlang",
+        "path": "./syntaxes/scaffoldlang.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "scaffoldlang.run",
+        "title": "🏎️ Run ScaffoldLang",
+        "category": "ScaffoldLang",
+        "icon": "$(play)"
+      },
+      {
+        "command": "scaffoldlang.compile",
+        "title": "🚀 Compile ScaffoldLang",
+        "category": "ScaffoldLang",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "scaffoldlang.tokenize",
+        "title": "🔍 Debug Tokenization",
+        "category": "ScaffoldLang",
+        "icon": "$(search)"
+      },
+      {
+        "command": "scaffoldlang.benchmark",
+        "title": "⚡ Benchmark Performance",
+        "category": "ScaffoldLang",
+        "icon": "$(dashboard)"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "scaffoldlang.run",
+          "when": "resourceExtname == .sl",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "scaffoldlang.run",
+          "when": "resourceExtname == .sl",
+          "group": "navigation"
+        },
+        {
+          "command": "scaffoldlang.compile",
+          "when": "resourceExtname == .sl",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "scaffoldlang.run",
+          "when": "resourceExtname == .sl"
+        },
+        {
+          "command": "scaffoldlang.compile",
+          "when": "resourceExtname == .sl"
+        },
+        {
+          "command": "scaffoldlang.tokenize",
+          "when": "resourceExtname == .sl"
+        },
+        {
+          "command": "scaffoldlang.benchmark"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "scaffoldlang.run",
+        "key": "ctrl+f5",
+        "mac": "cmd+f5",
+        "when": "resourceExtname == .sl"
+      },
+      {
+        "command": "scaffoldlang.compile",
+        "key": "ctrl+shift+b",
+        "mac": "cmd+shift+b",
+        "when": "resourceExtname == .sl"
+      }
+    ],
+    "configuration": {
+      "title": "ScaffoldLang",
+      "properties": {
+        "scaffoldlang.executablePath": {
+          "type": "string",
+          "default": "scaffoldlang",
+          "description": "Path to the ScaffoldLang executable"
+        },
+        "scaffoldlang.showHypercarBranding": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show hypercar branding in output"
+        },
+        "scaffoldlang.autoRun": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run on save"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourorg/scaffoldlang-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/yourorg/scaffoldlang-vscode/issues"
+  },
+  "homepage": "https://scaffoldlang.dev"
+} 

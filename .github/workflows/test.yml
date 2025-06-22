@@ -1,0 +1,23 @@
+name: Test ScaffoldLang
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        
+    - name: Build
+      run: cargo build --release
+      
+    - name: Test Installation
+      run: |
+        chmod +x test-installation.sh
+        ./test-installation.sh

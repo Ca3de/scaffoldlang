@@ -1,0 +1,16 @@
+[package]
+name = "scaffoldlang"
+version = "1.0.0"
+edition = "2021"
+authors = ["ScaffoldLang Team"]
+license = "MIT"
+description = "Ultra-Performance Programming Language: Python Ease + C Speed + AI/ML Ready"
+
+[[bin]]
+name = "scaffoldlang"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

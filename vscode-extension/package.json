@@ -1,0 +1,131 @@
+{
+  "name": "scaffoldlang",
+  "displayName": "ScaffoldLang Koenigsegg Edition",
+  "description": "The hypercar of programming languages - syntax highlighting and execution",
+  "version": "2.0.0",
+  "publisher": "ScaffoldLang",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": ["Programming Languages"],
+  "keywords": ["scaffoldlang", "scaffold", "hypercar", "koenigsegg"],
+  "icon": "images/scaffoldlang-icon.png",
+  "galleryBanner": {
+    "color": "#1a1a1a",
+    "theme": "dark"
+  },
+  "contributes": {
+    "languages": [{
+      "id": "scaffoldlang",
+      "aliases": ["ScaffoldLang", "scaffold"],
+      "extensions": [".scaffold", ".sl"],
+      "configuration": "./language-configuration.json",
+      "icon": {
+        "light": "./images/file-icon-light.svg",
+        "dark": "./images/file-icon-dark.svg"
+      }
+    }],
+    "grammars": [{
+      "language": "scaffoldlang",
+      "scopeName": "source.scaffold",
+      "path": "./syntaxes/scaffoldlang.tmGrammar.json"
+    }],
+    "commands": [
+      {
+        "command": "scaffoldlang.run",
+        "title": "🏎️ Run ScaffoldLang File",
+        "category": "ScaffoldLang",
+        "icon": "$(play)"
+      },
+      {
+        "command": "scaffoldlang.compile",
+        "title": "⚡ Compile ScaffoldLang File",
+        "category": "ScaffoldLang",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "scaffoldlang.tokenize",
+        "title": "🔍 Tokenize ScaffoldLang File",
+        "category": "ScaffoldLang",
+        "icon": "$(search)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "scaffoldlang.run",
+        "key": "F5",
+        "when": "editorTextFocus && resourceExtname == '.scaffold'"
+      },
+      {
+        "command": "scaffoldlang.run",
+        "key": "F5",
+        "when": "editorTextFocus && resourceExtname == '.sl'"
+      },
+      {
+        "command": "scaffoldlang.compile",
+        "key": "ctrl+shift+b",
+        "when": "editorTextFocus && resourceExtname == '.scaffold'"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceExtname == '.scaffold'",
+          "command": "scaffoldlang.run",
+          "group": "1_run@1"
+        },
+        {
+          "when": "resourceExtname == '.scaffold'",
+          "command": "scaffoldlang.compile",
+          "group": "1_run@2"
+        },
+        {
+          "when": "resourceExtname == '.scaffold'",
+          "command": "scaffoldlang.tokenize",
+          "group": "1_run@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "resourceExtname == '.scaffold'",
+          "command": "scaffoldlang.run",
+          "group": "2_workspace"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ScaffoldLang",
+      "properties": {
+        "scaffoldlang.executablePath": {
+          "type": "string",
+          "default": "scaffoldlang",
+          "description": "Path to the ScaffoldLang executable"
+        },
+        "scaffoldlang.showExecutionTime": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show execution time in output"
+        },
+        "scaffoldlang.clearOutputOnRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Clear output panel before running"
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onLanguage:scaffoldlang"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+} 

@@ -1,0 +1,11 @@
+/target/
+Cargo.lock
+*.pdb
+*.exe
+.DS_Store
+node_modules/
+*.log
+*.tmp
+.vscode/settings.json
+scaffoldlang-v*.tar.gz
+scaffoldlang-v*-distribution/
