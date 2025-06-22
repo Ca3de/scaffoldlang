@@ -89,9 +89,10 @@ else
     echo -e "${GREEN}✅ Rust/Cargo found${NC}"
     
     # Download the repository
-    echo -e "${YELLOW}📦 Downloading ScaffoldLang source...${NC}"
+    echo -e "${YELLOW}📦 Downloading ScaffoldLang source from GitHub...${NC}"
     TEMP_DIR="/tmp/scaffoldlang-source"
     rm -rf "$TEMP_DIR"
+    echo -e "${BLUE}   Cloning: https://github.com/Ca3de/scaffoldlang.git${NC}"
     git clone https://github.com/Ca3de/scaffoldlang.git "$TEMP_DIR"
     
     if [ $? -ne 0 ]; then
