@@ -73,6 +73,12 @@ if [ -f "scaffoldlang-v2.0.0-complete.tar.gz" ]; then
 else
     echo -e "${YELLOW}🔧 Building ScaffoldLang from source...${NC}"
     
+    # Check if git is installed
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}❌ Git not found. Please install git first.${NC}"
+        exit 1
+    fi
+    
     # Check if Rust is installed
     if ! command -v cargo &> /dev/null; then
         echo -e "${RED}❌ Rust/Cargo not found. Installing Rust...${NC}"
@@ -82,13 +88,24 @@ else
     
     echo -e "${GREEN}✅ Rust/Cargo found${NC}"
     
+    # Download the repository
+    echo -e "${YELLOW}📦 Downloading ScaffoldLang source...${NC}"
+    TEMP_DIR="/tmp/scaffoldlang-source"
+    rm -rf "$TEMP_DIR"
+    git clone https://github.com/Ca3de/scaffoldlang.git "$TEMP_DIR"
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Failed to download source code${NC}"
+        exit 1
+    fi
+    
     # Copy source files to install directory
-    echo -e "${YELLOW}📁 Copying source files...${NC}"
-    cp -r src "$INSTALL_DIR/"
-    cp Cargo.toml "$INSTALL_DIR/"
-    cp -r vscode-extension "$INSTALL_DIR/"
-    cp -r examples "$INSTALL_DIR/"
-    cp *.md "$INSTALL_DIR/" 2>/dev/null || true
+    echo -e "${YELLOW}📁 Setting up ScaffoldLang...${NC}"
+    cp -r "$TEMP_DIR/src" "$INSTALL_DIR/"
+    cp "$TEMP_DIR/Cargo.toml" "$INSTALL_DIR/"
+    cp -r "$TEMP_DIR/vscode-extension" "$INSTALL_DIR/"
+    cp -r "$TEMP_DIR/examples" "$INSTALL_DIR/"
+    cp "$TEMP_DIR"/*.md "$INSTALL_DIR/" 2>/dev/null || true
     
     # Build ScaffoldLang
     echo -e "${YELLOW}🔨 Building ScaffoldLang (this may take a few minutes)...${NC}"
@@ -104,14 +121,17 @@ else
         echo -e "${RED}❌ Build failed!${NC}"
         exit 1
     fi
+    
+    # Cleanup temporary directory
+    rm -rf "$TEMP_DIR"
 fi
 
-if [ -d "examples" ]; then
-    cp -r examples/* "$EXAMPLES_DIR/"
+# Copy examples if they exist
+if [ -d "$INSTALL_DIR/examples" ]; then
+    cp -r "$INSTALL_DIR/examples"/* "$EXAMPLES_DIR/" 2>/dev/null || true
 fi
 
-# Copy documentation
-cp -f *.md "$INSTALL_DIR/" 2>/dev/null || true
+# Documentation is already copied in the build process
 
 # Add to PATH
 echo -e "${YELLOW}🔧 Setting up PATH...${NC}"
